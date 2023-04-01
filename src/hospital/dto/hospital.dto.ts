@@ -21,3 +21,14 @@ export class HospitalDto{
     @IsBoolean()
     is_central?: boolean
 }
+
+export class HospitalSigninDto{
+
+    @IsEmail()
+    @IsNotEmpty()
+    email: string
+
+    @IsString()
+    @IsNotEmpty()
+    password: string
+}

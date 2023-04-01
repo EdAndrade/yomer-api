@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { HospitalDto } from "./dto";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { HospitalDto, HospitalSigninDto } from "./dto";
 import * as argon from "argon2"
 import { PrismaService } from "../prisma/prisma.service";
 
@@ -7,6 +7,24 @@ import { PrismaService } from "../prisma/prisma.service";
 export class HospitalService{
 
     constructor(private prisma: PrismaService){}
+
+    async signin(dto: HospitalSigninDto){
+
+        const hospital = await this.prisma.hospital.findUnique({
+            where: {
+                email: dto.email
+            }
+        })
+
+        if(!hospital) throw new NotFoundException('Hospital does not exists')
+
+        const passwordMatch = await argon.verify(hospital.password, dto.password)
+
+        if(!passwordMatch) throw new NotFoundException('Hospital does not exists')
+
+        delete hospital.password
+        return hospital
+    }
 
     async signup(dto: HospitalDto){
 
@@ -21,5 +39,17 @@ export class HospitalService{
             }
         })
         return hospital
+    }
+
+    async getAll(){
+        return await this.prisma.hospital.findMany({
+            select: {
+                name: true,
+                id: true,
+                location: true,
+                is_central: true,
+                email: true
+            }
+        })
     }
 }
