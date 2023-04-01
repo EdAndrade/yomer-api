@@ -28,16 +28,16 @@ export class HospitalService{
 
     async signup(dto: HospitalDto){
 
-        const hash = await argon.hash(dto.password)
+        const { password, ...hospitalRest } = dto
+        const hash = await argon.hash(password)
         const hospital = await this.prisma.hospital.create({
             data: {
-                name: dto.name,
-                email: dto.email,
-                password: hash,
-                is_central: dto.is_central,
-                location: dto.location
+                ...hospitalRest,
+                password: hash
             }
         })
+
+        delete hospital.password
         return hospital
     }
 
