@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Hospital{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  name String
+  location String
+  email String @unique
+  password String
+  is_central Boolean @default(false) 
+
+  doctors Doctor[]
+}
+
+model Doctor{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  first_name String
+  last_name String
+  is_active Boolean @default(false)
+  birthdate DateTime @db.Date
+  role String
+  years_of_experience Int
+  email String @unique
+  password String
+  avatar String
+
+  hospitalId Int
+  hospital Hospital @relation(fields: [hospitalId], references: [id])
+
+  patients Patient[]
+}
+
+model Patient{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  first_name String
+  last_name String
+  birthdate DateTime @db.Date
+  medical_registration String
+  avatar String
+  phone_number String
+
+  doctorId Int
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model ShareMedicalRegistration{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  can_share Boolean @default(false)
+
+  patientId Int
+  doctorId Int
+}
