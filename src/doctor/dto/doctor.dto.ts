@@ -60,7 +60,6 @@ export const DoctorPrismaSelectionDto = {
     role: true,
     years_of_experience: true,
     email: true,
-    password: true,
     avatar: true,
     hospitalId: true
 }
