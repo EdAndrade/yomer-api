@@ -41,6 +41,7 @@ export class DoctorService{
     }
 
     async getDoctorById(id: number){
+        console.log(id)
         const doctor = await this.prisma.doctor.findUnique({
             where: {
                 id
