@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import { DoctorDto } from "./dto";
+import { DoctorDto, DoctorPrismaSelectionDto, DoctorSigninDto } from "./dto";
 import * as argon from "argon2"
 
 @Injectable({})
@@ -18,6 +18,52 @@ export class DoctorService{
                 password: hash
             }
         })
+        delete doctor.password
         return doctor
+    }
+
+    async signin(dto: DoctorSigninDto){
+
+        const doctor = await this.prisma.doctor.findUnique({
+            where: {
+                email: dto.email
+            }
+        })
+
+        if(!doctor) throw new NotFoundException('Doctor does not exits')
+
+        const passwordMatch = await argon.verify(doctor.password, dto.password)
+
+        if(!passwordMatch) throw new NotFoundException('Doctor does not exists')
+
+        delete doctor.password
+        return doctor
+    }
+
+    async getDoctorById(id: number){
+        const doctor = await this.prisma.doctor.findUnique({
+            where: {
+                id
+            }
+        })
+        
+        if(!doctor) throw new NotFoundException('Doctor does not exists')
+        delete doctor.password
+        return doctor
+    }
+
+    async getDoctorsByHospitalId(id: number){
+        return await this.prisma.doctor.findMany({
+            where: {
+                hospitalId: id
+            },
+            select: DoctorPrismaSelectionDto
+        })
+    }
+
+    async getAll(){
+        return await this.prisma.doctor.findMany({
+            select: DoctorPrismaSelectionDto,
+        })
     }
 }

@@ -1,4 +1,5 @@
-import { IsBoolean, IsDate, IsEmail, IsInt, IsNotEmpty, IsString } from "class-validator"
+import { IsDate, IsEmail, IsISO8601, IsInt, IsNotEmpty, IsRFC3339, IsString } from "class-validator"
+import { Doctor } from "@prisma/client"
 
 export class DoctorDto{
 
@@ -10,11 +11,7 @@ export class DoctorDto{
     @IsNotEmpty()
     last_name: string
 
-    @IsBoolean()
-    @IsNotEmpty()
-    is_active: boolean
-
-    @IsDate()
+    @IsRFC3339()
     @IsNotEmpty()
     birthdate: string
 
@@ -41,4 +38,29 @@ export class DoctorDto{
     @IsInt()
     @IsNotEmpty()
     hospitalId: number
+}
+
+export class DoctorSigninDto{
+
+    @IsEmail()
+    @IsNotEmpty()
+    email: string
+
+    @IsString()
+    @IsNotEmpty()
+    password: string
+}
+
+export const DoctorPrismaSelectionDto = {
+    id: true,
+    first_name: true,
+    last_name: true,
+    is_active: true,
+    birthdate: true,
+    role: true,
+    years_of_experience: true,
+    email: true,
+    password: true,
+    avatar: true,
+    hospitalId: true
 }

@@ -30,7 +30,7 @@ model Doctor{
   first_name String
   last_name String
   is_active Boolean @default(false)
-  birthdate DateTime @db.Date
+  birthdate DateTime @db.Timestamp()
   role String
   years_of_experience Int
   email String @unique
