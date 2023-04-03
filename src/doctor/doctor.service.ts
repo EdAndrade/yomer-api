@@ -79,7 +79,7 @@ export class DoctorService{
     }
 
     async changeDoctorStatus(status: boolean, id: number){
-        const doctor = this.prisma.doctor.findUnique({
+        const doctor = await this.prisma.doctor.findUnique({
             where: {
                 id
             }

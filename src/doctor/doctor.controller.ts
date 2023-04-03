@@ -22,7 +22,7 @@ export class DoctorController{
         return this.doctor.getAll()
     }
 
-    @Get('me/:id')
+    @Get(':id')
     getDoctorById(@Param('id', ParseIntPipe) id: number){
         return this.doctor.getDoctorById(id)
     }
