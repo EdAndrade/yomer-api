@@ -41,10 +41,20 @@ export class DoctorService{
     }
 
     async getDoctorById(id: number){
-        console.log(id)
         const doctor = await this.prisma.doctor.findUnique({
             where: {
                 id
+            },
+            include: {
+                hospital: {
+                    select: {
+                        name: true,
+                        id: true,
+                        location: true,
+                        is_central: true,
+                        email: true
+                    }
+                }
             }
         })
         
@@ -65,6 +75,26 @@ export class DoctorService{
     async getAll(){
         return await this.prisma.doctor.findMany({
             select: DoctorPrismaSelectionDto,
+        })
+    }
+
+    async changeDoctorStatus(status: boolean, id: number){
+        const doctor = this.prisma.doctor.findUnique({
+            where: {
+                id
+            }
+        })
+
+        if(!doctor) throw new NotFoundException('Doctor does not exists')
+
+        return this.prisma.doctor.update({
+            where: {
+                id
+            },
+            data: {
+                is_active: status
+            },
+            select: DoctorPrismaSelectionDto
         })
     }
 }

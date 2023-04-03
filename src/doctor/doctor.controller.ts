@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { DoctorDto, DoctorSigninDto } from "./dto";
 import { DoctorService } from "./doctor.service";
 
@@ -30,5 +30,10 @@ export class DoctorController{
     @Get('byhospital/:id')
     getDoctorsByHospitalId(@Param('id', ParseIntPipe) id: number){
         return this.doctor.getDoctorsByHospitalId(id)
+    }
+
+    @Put(':id/changestatus')
+    changeDoctorStatus(@Param('id', ParseIntPipe) id: number, @Body() { status }: {status: boolean}){
+        return this.doctor.changeDoctorStatus(status, id)
     }
 }
