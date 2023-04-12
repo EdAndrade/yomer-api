@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { DoctorDto, DoctorSigninDto } from "./dto";
 import { DoctorService } from "./doctor.service";
+import { UploadInterceptor } from "src/common/interceptors";
+import { Express } from 'express'
 
-@Controller('doctor')
+@Controller('doctors')
 export class DoctorController{
 
     constructor(private doctor: DoctorService){}
@@ -27,12 +29,18 @@ export class DoctorController{
         return this.doctor.getDoctorById(id)
     }
 
-    @Get('byhospital/:id')
+    @Get('hospital/:id')
     getDoctorsByHospitalId(@Param('id', ParseIntPipe) id: number){
         return this.doctor.getDoctorsByHospitalId(id)
     }
 
-    @Put(':id/changestatus')
+    @Put(':id/avatar')
+    @UseInterceptors(UploadInterceptor)
+    UpdateAvatar(@UploadedFile() file: Express.Multer.File, @Param('id', ParseIntPipe) id: number){
+        return this.doctor.UpdateAvatar(file.filename, id)
+    }
+
+    @Put(':id/status')
     changeDoctorStatus(@Param('id', ParseIntPipe) id: number, @Body() { status }: {status: boolean}){
         return this.doctor.changeDoctorStatus(status, id)
     }

@@ -97,4 +97,24 @@ export class DoctorService{
             select: DoctorPrismaSelectionDto
         })
     }
+
+    async UpdateAvatar(filename: string, id: number){
+        const doctor = await this.prisma.doctor.findUnique({
+            where: {
+                id
+            }
+        })
+
+        if(!doctor) throw new NotFoundException('Doctor does not exists')
+
+        return this.prisma.doctor.update({
+            where: {
+                id
+            },
+            data: {
+                avatar: filename
+            },
+            select: DoctorPrismaSelectionDto
+        })
+    }
 }
