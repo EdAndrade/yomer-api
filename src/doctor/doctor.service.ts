@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { DoctorDto, DoctorPrismaSelectionDto, DoctorSigninDto } from "./dto";
 import * as argon from "argon2"
@@ -29,11 +29,8 @@ export class DoctorService{
                 email: dto.email
             }
         })
-
         if(!doctor) throw new NotFoundException('Doctor does not exits')
-
         const passwordMatch = await argon.verify(doctor.password, dto.password)
-
         if(!passwordMatch) throw new NotFoundException('Doctor does not exists')
 
         delete doctor.password
