@@ -1,34 +1,32 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsString } from "class-validator"
+import { IsBoolean, IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class HospitalDto{
+export class HospitalDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-    @IsNotEmpty()
-    @IsString()
-    name: string
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsEmail()
-    @IsNotEmpty()
-    email: string
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string
+  @IsString()
+  @IsNotEmpty()
+  location: string;
 
-    @IsString()
-    @IsNotEmpty()
-    location: string
-
-    @IsBoolean()
-    is_central?: boolean
+  @IsBoolean()
+  is_central?: boolean;
 }
 
-export class HospitalSigninDto{
+export class HospitalSigninDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsEmail()
-    @IsNotEmpty()
-    email: string
-
-    @IsString()
-    @IsNotEmpty()
-    password: string
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 }

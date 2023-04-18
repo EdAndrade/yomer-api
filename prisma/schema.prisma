@@ -50,9 +50,10 @@ model Patient{
   first_name String
   last_name String
   birthdate DateTime @db.Date
+  password String
+
   medical_registration String
-  avatar String
-  phone_number String
+  phone_number String @unique
 
   doctorId Int
   doctor Doctor @relation(fields: [doctorId], references: [id])

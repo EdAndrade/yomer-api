@@ -5,17 +5,19 @@ import { ConfigModule } from '@nestjs/config';
 import { DoctorModule } from './doctor/doctor.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { PatientModule } from './patient/patient.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname,"..", "uploads"),
-      serveRoot: "/public"
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/public',
     }),
     HospitalModule,
     DoctorModule,
-    PrismaModule
+    PatientModule,
+    PrismaModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

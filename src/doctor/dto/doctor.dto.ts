@@ -1,65 +1,67 @@
-import { IsDate, IsEmail, IsISO8601, IsInt, IsNotEmpty, IsRFC3339, IsString } from "class-validator"
-import { Doctor } from "@prisma/client"
+import {
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsRFC3339,
+  IsString,
+} from 'class-validator';
+export class DoctorDto {
+  @IsString()
+  @IsNotEmpty()
+  first_name: string;
 
-export class DoctorDto{
+  @IsString()
+  @IsNotEmpty()
+  last_name: string;
 
-    @IsString()
-    @IsNotEmpty()
-    first_name: string
+  @IsRFC3339()
+  @IsNotEmpty()
+  birthdate: string;
 
-    @IsString()
-    @IsNotEmpty()
-    last_name: string
+  @IsString()
+  @IsNotEmpty()
+  role: string;
 
-    @IsRFC3339()
-    @IsNotEmpty()
-    birthdate: string
+  @IsInt()
+  @IsNotEmpty()
+  years_of_experience: number;
 
-    @IsString()
-    @IsNotEmpty()
-    role: string
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsInt()
-    @IsNotEmpty()
-    years_of_experience: number
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
-    @IsEmail()
-    @IsNotEmpty()
-    email: string 
+  @IsString()
+  @IsNotEmpty()
+  avatar: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string
-
-    @IsString()
-    @IsNotEmpty()
-    avatar: string
-    
-    @IsInt()
-    @IsNotEmpty()
-    hospitalId: number
+  @IsInt()
+  @IsNotEmpty()
+  hospitalId: number;
 }
 
-export class DoctorSigninDto{
+export class DoctorSigninDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsEmail()
-    @IsNotEmpty()
-    email: string
-
-    @IsString()
-    @IsNotEmpty()
-    password: string
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 }
 
 export const DoctorPrismaSelectionDto = {
-    id: true,
-    first_name: true,
-    last_name: true,
-    is_active: true,
-    birthdate: true,
-    role: true,
-    years_of_experience: true,
-    email: true,
-    avatar: true,
-    hospitalId: true
-}
+  id: true,
+  first_name: true,
+  last_name: true,
+  is_active: true,
+  birthdate: true,
+  role: true,
+  years_of_experience: true,
+  email: true,
+  avatar: true,
+  hospitalId: true,
+};
