@@ -2,10 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DoctorDto, DoctorPrismaSelectionDto, DoctorSigninDto } from './dto';
 import * as argon from 'argon2';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable({})
 export class DoctorService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private auth: AuthService) {}
 
   async signup(dto: DoctorDto) {
     const { password, ...doctorRest } = dto;
@@ -30,8 +31,10 @@ export class DoctorService {
     const passwordMatch = await argon.verify(doctor.password, dto.password);
     if (!passwordMatch) throw new NotFoundException('Doctor does not exists');
 
+
+    const token = await this.auth.generateToken(doctor.email);
     delete doctor.password;
-    return doctor;
+    return { token, ...doctor };
   }
 
   async getDoctorById(id: number) {

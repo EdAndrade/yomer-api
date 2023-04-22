@@ -6,6 +6,7 @@ import { DoctorModule } from './doctor/doctor.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PatientModule } from './patient/patient.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PatientModule } from './patient/patient.module';
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/public',
     }),
+    AuthModule,
     HospitalModule,
     DoctorModule,
     PatientModule,

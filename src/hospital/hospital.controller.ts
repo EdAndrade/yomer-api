@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { HospitalDto, HospitalSigninDto } from './dto';
 import { HospitalService } from './hospital.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('hospital')
 export class HospitalController {
@@ -17,6 +18,7 @@ export class HospitalController {
   }
 
   @Get('')
+  @UseGuards(AuthGuard('jwt'))
   getAll() {
     return this.hospitalService.getAll();
   }
