@@ -52,7 +52,8 @@ export class PatientService {
       include: {
         doctor: {
           select: DoctorPrismaSelectionDto
-        }
+        },
+        medicalRegistration: {}
       }
     })
 

@@ -94,7 +94,7 @@ model MedicalRegistration{
   consume_alcohol Boolean
 
   cronical_disease Boolean
-  describe_cronical_disease Boolean
+  describe_cronical_disease String
   pastweeks_health_description String
 
   patientId Int @unique

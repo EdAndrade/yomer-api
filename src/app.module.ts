@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PatientModule } from './patient/patient.module';
 import { AuthModule } from './auth/auth.module';
+import { MedicalRegistrationModule } from './medical_registration/medical.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     DoctorModule,
     PatientModule,
     PrismaModule,
+    MedicalRegistrationModule
   ],
 })
 export class AppModule {}
