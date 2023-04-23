@@ -57,13 +57,46 @@ model Patient{
 
   doctorId Int
   doctor Doctor @relation(fields: [doctorId], references: [id])
+
+  medicalRegistration MedicalRegistration?
 }
 
-model ShareMedicalRegistration{
+model MedicalRegistration{
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
-  can_share Boolean @default(false)
+  updateAt DateTime @updatedAt
 
-  patientId Int
-  doctorId Int
+  gender Boolean
+  
+  relative_asma Boolean
+  relative_cancer  Boolean
+  relative_cardiac_disease Boolean
+  relative_diabetes Boolean
+  relative_hypertension Boolean
+  relative_psychiatric_disorder Boolean
+  relative_epilepsy Boolean
+  relative_allergy Boolean
+  relative_bronchitis Boolean
+  relative_other Boolean
+  relative_describe_other Boolean
+
+  taking_medications Boolean
+  medications_description String
+
+  allergies Boolean
+  allergies_description String
+
+  use_tobacco Boolean
+
+  use_illegal_drugs Boolean
+  illegal_drugs_family_historic Boolean
+
+  consume_alcohol Boolean
+
+  cronical_disease Boolean
+  describe_cronical_disease Boolean
+  pastweeks_health_description String
+
+  patientId Int @unique
+  patient Patient @relation(fields: [patientId], references: [id])
 }
