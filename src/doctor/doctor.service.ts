@@ -27,9 +27,9 @@ export class DoctorService {
         email: dto.email,
       },
     });
-    if (!doctor) throw new NotFoundException('Doctor does not exits');
+    if (!doctor) throw new NotFoundException();
     const passwordMatch = await argon.verify(doctor.password, dto.password);
-    if (!passwordMatch) throw new NotFoundException('Doctor does not exists');
+    if (!passwordMatch) throw new NotFoundException();
 
 
     const token = await this.auth.generateToken(doctor.email);
@@ -55,7 +55,7 @@ export class DoctorService {
       },
     });
 
-    if (!doctor) throw new NotFoundException('Doctor does not exists');
+    if (!doctor) throw new NotFoundException();
     delete doctor.password;
     return doctor;
   }
@@ -82,7 +82,7 @@ export class DoctorService {
       },
     });
 
-    if (!doctor) throw new NotFoundException('Doctor does not exists');
+    if (!doctor) throw new NotFoundException();
 
     return this.prisma.doctor.update({
       where: {
@@ -102,7 +102,7 @@ export class DoctorService {
       },
     });
 
-    if (!doctor) throw new NotFoundException('Doctor does not exists');
+    if (!doctor) throw new NotFoundException();
 
     return this.prisma.doctor.update({
       where: {

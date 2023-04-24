@@ -1,4 +1,4 @@
-import { IsBoolean, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsString } from "class-validator";
 
 export class MedicalRegistrationDto{
 
@@ -89,4 +89,10 @@ export class MedicalRegistrationDto{
 
     @IsString()
     pastweeks_health_description: string
+}
+
+export class MedicalRegistrationUpdateDto extends MedicalRegistrationDto{
+    @IsEmail()
+    @IsNotEmpty()
+    doctor_email: string;
 }
