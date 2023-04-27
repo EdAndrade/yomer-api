@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { PatientDto, PatientPrismaSelectionDto, PatientSigninDto } from './dto';
 import * as argon from 'argon2';
-import { DoctorPrismaSelectionDto } from 'src/doctor/dto';
+import { DoctorPrismaSelectionDto } from '../doctor/dto';
 
 @Injectable({})
 export class PatientService {
@@ -15,7 +15,7 @@ export class PatientService {
     const patient = await this.prisma.patient.create({
       data: {
         ...patientRest,
-        password: hash
+        password: hash,
       },
     });
 
@@ -23,52 +23,51 @@ export class PatientService {
     return patient;
   }
 
-  async signin(dto: PatientSigninDto){
+  async signin(dto: PatientSigninDto) {
     const patient = await this.prisma.patient.findUnique({
       where: {
-        phone_number: dto.phone_number
-      }
-    })
+        phone_number: dto.phone_number,
+      },
+    });
 
-    if(!patient) throw new NotFoundException('Patient does not exists')
-    const passwordMatch = await argon.verify(patient.password, dto.password)
-    if(!passwordMatch) throw new NotFoundException('Patient does not exists')
+    if (!patient) throw new NotFoundException('Patient does not exists');
+    const passwordMatch = await argon.verify(patient.password, dto.password);
+    if (!passwordMatch) throw new NotFoundException('Patient does not exists');
 
-    delete patient.password
-    return patient
+    delete patient.password;
+    return patient;
   }
 
-  async getAll(){
+  async getAll() {
     return await this.prisma.patient.findMany({
-      select: PatientPrismaSelectionDto
-    })
+      select: PatientPrismaSelectionDto,
+    });
   }
 
-  async getById(id: number){
+  async getById(id: number) {
     const patient = await this.prisma.patient.findUnique({
       where: {
-        id
+        id,
       },
       include: {
         doctor: {
-          select: DoctorPrismaSelectionDto
+          select: DoctorPrismaSelectionDto,
         },
-        medicalRegistration: {}
-      }
-    })
+        medicalRegistration: {},
+      },
+    });
 
-    if(!patient) throw new NotFoundException('Patient does not exists')
-    delete patient.password
-    return patient
+    if (!patient) throw new NotFoundException('Patient does not exists');
+    delete patient.password;
+    return patient;
   }
 
-  async getByDoctor(id: number){
-    
+  async getByDoctor(id: number) {
     return this.prisma.patient.findMany({
       where: {
-        doctorId: id
+        doctorId: id,
       },
       select: PatientPrismaSelectionDto,
-    })
+    });
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { DoctorDto, DoctorPrismaSelectionDto, DoctorSigninDto } from './dto';
 import * as argon from 'argon2';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({})
 export class DoctorService {
@@ -30,7 +30,6 @@ export class DoctorService {
     if (!doctor) throw new NotFoundException();
     const passwordMatch = await argon.verify(doctor.password, dto.password);
     if (!passwordMatch) throw new NotFoundException();
-
 
     const token = await this.auth.generateToken(doctor.email);
     delete doctor.password;

@@ -29,14 +29,14 @@ export class PatientDto {
   doctorId: number;
 }
 
-export class PatientSigninDto{
+export class PatientSigninDto {
   @IsNotEmpty()
   @IsString()
-  phone_number: string
+  phone_number: string;
 
   @IsNotEmpty()
   @IsString()
-  password: string
+  password: string;
 }
 
 export const PatientPrismaSelectionDto = {
@@ -46,5 +46,5 @@ export const PatientPrismaSelectionDto = {
   phone_number: true,
   birthdate: true,
   medical_registration: true,
-  doctorId: true
-}
+  doctorId: true,
+};

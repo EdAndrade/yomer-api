@@ -21,7 +21,7 @@ import { MedicalRegistrationModule } from './medical_registration/medical.module
     DoctorModule,
     PatientModule,
     PrismaModule,
-    MedicalRegistrationModule
+    MedicalRegistrationModule,
   ],
 })
 export class AppModule {}

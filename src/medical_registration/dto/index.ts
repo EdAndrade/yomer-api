@@ -1,1 +1,1 @@
-export * from './medical.dto'
+export * from './medical.dto';

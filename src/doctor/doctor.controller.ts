@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { DoctorDto, DoctorSigninDto } from './dto';
 import { DoctorService } from './doctor.service';
-import { UploadInterceptor } from 'src/common/interceptors';
+import { UploadInterceptor } from '../common/interceptors';
 import { Express } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 
