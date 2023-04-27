@@ -9,6 +9,9 @@ import { DoctorDto } from '../src/doctor/dto';
 describe('e2e test', () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let hospitalId: number
+  let doctorId: number
+  let patientId: number
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -31,22 +34,45 @@ describe('e2e test', () => {
     app.close();
   });
 
-  describe('Hospital', () => {
-    const hospital: HospitalDto = {
+  //=================MOCKS
+  const mocks: {
+    doctor: DoctorDto,
+    hospital: HospitalDto 
+  } = {
+    hospital: {
       name: 'Cajueiro',
       email: 'cajueiro@gmail.com',
       location: 'Maianga',
       is_central: false,
       password: 'created',
-    };
+    },
+
+    doctor: {
+      first_name: 'Carlos',
+      last_name: 'Garcia',
+      email: 'carlos@gmail.com',
+      password: '123',
+      avatar: 'fdfsa;lkje;lkafjsdlksdf',
+      role: 'Cardiologista',
+      birthdate: '1988-11-05T00:00:00Z',
+      years_of_experience: 20,
+      hospitalId: 1
+    }
+  }
+  //END MOCKS================
+
+  describe('Hospital', () => {
+
+    const { hospital } = mocks
 
     describe('Right path', () => {
 
-      it('Should create account', () => {
-        return pactum
+      it('Should create account', async () => {
+        hospitalId = await pactum
           .spec()
           .post('/hospital/signup')
           .withBody(hospital)
+          .returns('id')
           .expectStatus(201);
       });
 
@@ -103,111 +129,118 @@ describe('e2e test', () => {
     });
   });
 
-  // describe('doctor', () => {
-  //   const doctor: DoctorDto = {
-  //     first_name: 'Carlos',
-  //     last_name: 'Garcia',
-  //     email: 'carlos@gmail.com',
-  //     password: '123',
-  //     hospitalId: 1,
-  //     avatar: 'fdfsa;lkje;lkafjsdlksdf',
-  //     role: 'Cardiologista',
-  //     birthdate: '1988-11-05T00:00:00Z',
-  //     years_of_experience: 20,
-  //   };
+  describe('doctor', () => {
+    const { doctor } = mocks
+    
+    describe('Right path', () => {
+      it('Should create account', async () => {
+        doctorId = await pactum
+          .spec()
+          .post('/doctors/signup')
+          .withBody({
+            ...doctor,
+            hospitalId
+          })
+          .returns('id')
+          .expectStatus(201);
+      });
 
-  //   describe('Right path', () => {
-  //     it('Should create account', () => {
-  //       return pactum
-  //         .spec()
-  //         .post('/doctors/signup')
-  //         .withBody(doctor)
-  //         .expectStatus(201)
-  //         .expectJsonLength(8);
-  //     });
+      it('Should signin', () => {
+        return pactum
+          .spec()
+          .post('/doctors/signin')
+          .withBody({
+            email: doctor.email,
+            password: doctor.password,
+          })
+          .stores('doctorToken', 'token')
+          .expectStatus(200)
+      });
 
-  //     it('Should signin', () => {
-  //       return pactum
-  //         .spec()
-  //         .post('/doctors/signin')
-  //         .withBody({
-  //           email: doctor.email,
-  //           password: doctor.password,
-  //         })
-  //         .expectStatus(200)
-  //         .expectJsonLength(8);
-  //     });
+      it('Should get doctors', () => {
+        return pactum
+          .spec()
+          .get('/doctors')
+          .withHeaders({
+            Authorization: 'Bearer $S{doctorToken}'
+          })
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
 
-  //     it('Should get doctors', () => {
-  //       return pactum
-  //         .spec()
-  //         .get('/doctors')
-  //         .expectStatus(200)
-  //         .expectJsonLength(1);
-  //     });
+      it('Should get doctor by id', () => {
+        return pactum
+          .spec()
+          .get(`/doctors/${doctorId}`)
+          .withHeaders({
+            Authorization: 'Bearer $S{doctorToken}'
+          })
+          .expectStatus(200);
+      });
 
-  //     it('Should get doctor by id', () => {
-  //       return pactum
-  //         .spec()
-  //         .get('/doctors/1')
-  //         .expectStatus(200)
-  //         .expectJsonLength(8);
-  //     });
+      it('Should get doctors by hospital', () => {
+        return pactum
+          .spec()
+          .get(`/doctors/hospital/${hospitalId}`)
+          .withHeaders({
+            Authorization: 'Bearer $S{doctorToken}'
+          })
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
 
-  //     it('Should get doctors by hospital', () => {
-  //       return pactum
-  //         .spec()
-  //         .get('/doctors/hospital/2')
-  //         .expectStatus(200)
-  //         .expectJsonLength(1);
-  //     });
+      it('Should change doctor status', () => {
+        return pactum
+          .spec()
+          .put(`/doctors/${doctorId}/status`) 
+          .withHeaders({
+            Authorization: 'Bearer $S{doctorToken}'
+          })
+          .withBody({ status: false })
+          .expectStatus(200);
+      });
+    });
 
-  //     it('Should change doctor status', () => {
-  //       return pactum
-  //         .spec()
-  //         .get('/doctors/1/status')
-  //         .withBody({ status: false })
-  //         .expectStatus(200)
-  //         .expectJsonLength(1)
-  //         .inspect('status');
-  //     });
-  //   });
+    describe('Wrong path', () => {
+      it('Should return badrequest', () => {
+        return pactum
+          .spec()
+          .post('/doctors/signup')
+          .withBody({})
+          .expectStatus(400);
+      });
 
-  //   describe('Wrong path', () => {
-  //     it('Should return badrequest', () => {
-  //       return pactum
-  //         .spec()
-  //         .post('/doctors/signup')
-  //         .withBody({})
-  //         .expectStatus(400);
-  //     });
+      it('Should return notfound', () => {
+        return pactum
+          .spec()
+          .post('/doctors/sigin')
+          .withBody({
+            email: doctor.email,
+            password: 'dfasd',
+          })
+          .expectStatus(404);
+      });
 
-  //     it('Should return notfound', () => {
-  //       return pactum
-  //         .spec()
-  //         .post('/doctors/sigin')
-  //         .withBody({
-  //           email: doctor.email,
-  //           password: '',
-  //         })
-  //         .expectStatus(404);
-  //     });
+      it('Should return unauthorized', () => {
+        return pactum
+          .spec()
+          .get('/doctors')
+          .expectStatus(401);
+      });
 
-  //     it('Should return unauthorized', () => {
-  //       return pactum
-  //         .spec()
-  //         .get('/doctors')
-  //         .expectStatus(401)
-  //         .expectJsonLength(1);
-  //     });
+      it('Should return notfound', () => {
+        return pactum.spec().get('/doctors/3532423')
+        .withHeaders({
+          Authorization: 'Bearer $S{doctorToken}'
+        }).expectStatus(404);
+      });
 
-  //     it('Should return notfound', () => {
-  //       return pactum.spec().get('/doctors/3').expectStatus(404);
-  //     });
-
-  //     it('Should return bad request', () => {
-  //       return pactum.spec().get('/doctors/dsfsd').expectStatus(400);
-  //     });
-  //   });
-  // });
+      it('Should return bad request', () => {
+        return pactum.spec().get('/doctors/dsfsd')
+        .withHeaders({
+          Authorization: 'Bearer $S{doctorToken}'
+        }).expectStatus(400);
+      });
+    });
+  });
 });
