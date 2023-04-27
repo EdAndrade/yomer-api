@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { HospitalDto, HospitalSigninDto } from './dto';
 import { HospitalService } from './hospital.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -12,6 +12,7 @@ export class HospitalController {
     return this.hospitalService.signup(dto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('signin')
   signin(@Body() dto: HospitalSigninDto) {
     return this.hospitalService.signin(dto);
