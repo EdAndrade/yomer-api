@@ -381,7 +381,7 @@ describe('e2e test', () => {
   });
 
   describe('Medical Registration', () => {
-    const { medical_registration } = mocks
+    const { medical_registration } = mocks;
 
     describe('Right path', () => {
       it('Should return create medical registration', () => {
@@ -395,14 +395,14 @@ describe('e2e test', () => {
           .stores('medical_registrationId', 'id')
           .expectStatus(201);
       });
-  
+
       it('Should update medical registration', () => {
         return pactum
           .spec()
-          .put(`${medicalRegistrationPath}/{id}`) 
+          .put(`${medicalRegistrationPath}/{id}`)
           .withBody({
             ...medical_registration,
-            use_tobacco: true
+            use_tobacco: true,
           })
           .withPathParams('id', '$S{medical_registrationId}')
           .withHeaders({
@@ -410,7 +410,7 @@ describe('e2e test', () => {
           })
           .expectStatus(200);
       });
-    })
+    });
 
     describe('Wrong path', () => {
       it('Should return bad request', () => {
@@ -419,24 +419,24 @@ describe('e2e test', () => {
           .post(`${medicalRegistrationPath}/patient/${patientId}`)
           .withBody({
             ...medical_registration,
-            use_tobacco: ''
+            use_tobacco: '',
           })
           .withHeaders({
             Authorization: 'Bearer $S{doctorToken}',
           })
           .expectStatus(400);
-      }); 
-  
+      });
+
       it('Should return not found', () => {
         return pactum
           .spec()
           .put(`${medicalRegistrationPath}/60765`)
           .withBody(medical_registration)
-          .withHeaders({ 
+          .withHeaders({
             Authorization: 'Bearer $S{doctorToken}',
           })
           .expectStatus(404);
       });
-    })
-  })
+    });
+  });
 });

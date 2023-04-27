@@ -16,11 +16,12 @@ export class MedicalRegistrationService {
   }
 
   async update(id: number, dto: MedicalRegistrationDto) {
-    const medical_registration = await this.prisma.medicalRegistration.findUnique({
-      where: { id },
-    });
+    const medical_registration =
+      await this.prisma.medicalRegistration.findUnique({
+        where: { id },
+      });
 
-    if(!medical_registration) throw new NotFoundException()
+    if (!medical_registration) throw new NotFoundException();
 
     return await this.prisma.medicalRegistration.update({
       where: { id },

@@ -18,6 +18,20 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
         );
         break;
       }
+      case 'P2025': {
+        this.exceptionResponseHandler(
+          response,
+          HttpStatusMap[HttpStatus.NOT_FOUND],
+        );
+        break;
+      }
+      case 'P2003': {
+        this.exceptionResponseHandler(
+          response,
+          HttpStatusMap[HttpStatus.BAD_REQUEST]('Bad request caused by a foreign key'),
+        );
+        break;
+      }
       default:
         super.catch(exception, host);
         break;

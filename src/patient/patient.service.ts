@@ -1,13 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { PatientDto, PatientPrismaSelectionDto, PatientSigninDto } from './dto';
 import * as argon from 'argon2';
 import { DoctorPrismaSelectionDto } from '../doctor/dto';
 import { AuthService } from '../auth/auth.service';
+import { Cache } from 'cache-manager';
 
 @Injectable({})
 export class PatientService {
-  constructor(private prisma: PrismaService, private auth: AuthService) {}
+  constructor(
+    private prisma: PrismaService,
+    private auth: AuthService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   async signup(dto: PatientDto) {
     const { password, ...patientRest } = dto;
@@ -47,6 +52,13 @@ export class PatientService {
   }
 
   async getById(id: number) {
+    const cachedPatient = await this.cacheManager.get('cached_patient')
+
+    if(cachedPatient){
+      console.log(cachedPatient)
+      return cachedPatient
+    }
+
     const patient = await this.prisma.patient.findUnique({
       where: {
         id,
@@ -61,6 +73,7 @@ export class PatientService {
 
     if (!patient) throw new NotFoundException('Patient does not exists');
     delete patient.password;
+    await this.cacheManager.set('cached_patient', { patient })
     return patient;
   }
 

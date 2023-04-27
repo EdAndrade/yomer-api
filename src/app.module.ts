@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { HospitalModule } from './hospital/hospital.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
@@ -15,6 +15,9 @@ import { MedicalRegistrationModule } from './medical_registration/medical.module
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/public',
+    }),
+    CacheModule.register({
+      isGlobal: true,
     }),
     AuthModule,
     HospitalModule,

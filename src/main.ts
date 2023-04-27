@@ -17,10 +17,10 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('medics')
     .build();
-  const SwaggerDocument = SwaggerModule.createDocument(app, SwaggerConfig)
+  const SwaggerDocument = SwaggerModule.createDocument(app, SwaggerConfig);
 
-  SwaggerModule.setup('api', app, SwaggerDocument)
-  
+  SwaggerModule.setup('api', app, SwaggerDocument);
+
   await app.listen(3000);
 }
 bootstrap();
