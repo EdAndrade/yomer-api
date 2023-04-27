@@ -89,9 +89,3 @@ export class MedicalRegistrationDto {
   @IsString()
   pastweeks_health_description: string;
 }
-
-export class MedicalRegistrationUpdateDto extends MedicalRegistrationDto {
-  @IsEmail()
-  @IsNotEmpty()
-  doctor_email: string;
-}

@@ -7,7 +7,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { MedicalRegistrationService } from './medical.service';
-import { MedicalRegistrationDto, MedicalRegistrationUpdateDto } from './dto';
+import { MedicalRegistrationDto } from './dto';
 
 @Controller('medical_registration')
 export class MedicalRegistrationController {
@@ -23,7 +23,7 @@ export class MedicalRegistrationController {
 
   @Put(':id')
   update(
-    @Body() dto: MedicalRegistrationUpdateDto,
+    @Body() dto: MedicalRegistrationDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
     return this.medicalRegistrationService.update(id, dto);

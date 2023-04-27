@@ -23,7 +23,7 @@ export class HospitalService {
 
     const token = await this.auth.generateToken(hospital.email);
     delete hospital.password;
-    return { token, ...hospital };;
+    return { token, ...hospital };
   }
 
   async signup(dto: HospitalDto) {

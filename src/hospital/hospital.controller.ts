@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { HospitalDto, HospitalSigninDto } from './dto';
 import { HospitalService } from './hospital.service';
 import { AuthGuard } from '@nestjs/passport';

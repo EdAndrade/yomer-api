@@ -3,10 +3,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PatientDto, PatientPrismaSelectionDto, PatientSigninDto } from './dto';
 import * as argon from 'argon2';
 import { DoctorPrismaSelectionDto } from '../doctor/dto';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({})
 export class PatientService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private auth: AuthService) {}
 
   async signup(dto: PatientDto) {
     const { password, ...patientRest } = dto;
@@ -34,8 +35,9 @@ export class PatientService {
     const passwordMatch = await argon.verify(patient.password, dto.password);
     if (!passwordMatch) throw new NotFoundException('Patient does not exists');
 
+    const token = await this.auth.generateToken(patient.phone_number);
     delete patient.password;
-    return patient;
+    return { token, ...patient };
   }
 
   async getAll() {
