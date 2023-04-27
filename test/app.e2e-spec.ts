@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
@@ -16,6 +16,9 @@ describe('e2e test', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe()
+    );
     await app.init();
     await app.listen(3333);
 
@@ -55,47 +58,49 @@ describe('e2e test', () => {
             email: hospital.email,
             password: hospital.password,
           })
-          .expectStatus(200)
-          .expectJsonLength(4);
+          .expectStatus(200) 
+          .stores('hospitalToken','token');
       });
 
       it('Should get hospitals', () => {
         return pactum
           .spec()
           .get('/hospital')
-          .expectStatus(200)
+          .withHeaders({
+            Authorization: 'Bearer $S{hospitalToken}'
+          })
+          .expectStatus(200) 
           .expectJsonLength(1);
       });
     });
 
-    // describe('Wrong path', () => {
-    //   it('Should return badrequest', () => {
-    //     return pactum
-    //       .spec()
-    //       .post('/hospital/signup')
-    //       .withBody({})
-    //       .expectStatus(400);
-    //   });
+    describe('Wrong path', () => {
+      it('Should return bad request', () => {
+        return pactum
+          .spec()
+          .post('/hospital/signup')
+          .withBody({ password: '' })
+          .expectStatus(400);
+      });
 
-    //   it('Should return notfound', () => {
-    //     return pactum
-    //       .spec()
-    //       .post('/hospital/sigin')
-    //       .withBody({
-    //         email: hospital.email,
-    //         password: '',
-    //       })
-    //       .expectStatus(404);
-    //   });
+      it('Should return notfound', () => {
+        return pactum
+          .spec()
+          .post('/hospital/signin')
+          .withBody({
+            email: hospital.email,
+            password: 'dasfdfa',
+          })
+          .expectStatus(404);
+      });
 
-    //   it('Should return unauthorized', () => {
-    //     return pactum
-    //       .spec()
-    //       .get('/hospital')
-    //       .expectStatus(401)
-    //       .expectJsonLength(1);
-    //   });
-    // });
+      it('Should return unauthorized', () => {
+        return pactum
+          .spec()
+          .get('/hospital')
+          .expectStatus(401)
+      });
+    });
   });
 
   // describe('doctor', () => {
