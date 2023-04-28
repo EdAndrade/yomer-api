@@ -2,7 +2,7 @@ FROM node:18-alpine As build
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ["yarn.lock", "package.json", "./"]
 
 RUN npm ci --only=production && npm cache clean --force
 
