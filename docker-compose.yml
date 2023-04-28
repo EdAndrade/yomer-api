@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+    api: &base-api
+        build:
+            context: ./
+            dockerfile: Dockerfile.dev
+        volumes:
+            - ./:/app
+            - ./uploads:/app/uploads
+    dev-db: &base-db
+        image: postgres:13
+        container_name: yomer_db
+        volumes:
+            - ./DB:/var/lib/postgresql
+    test-api:
+        <<: *base-api
+        build:
+            context: ./
+            dockerfile: Dockerfile.test
+    test-db:
+        <<: *base-db
+        container_name: yomer_test_db
+        volumes:
+            - ./DB/test:/var/lib/postgresql
+    pg-admin:
+        image: dpage/pgadmin4

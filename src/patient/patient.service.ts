@@ -52,13 +52,6 @@ export class PatientService {
   }
 
   async getById(id: number) {
-    const cachedPatient = await this.cacheManager.get('cached_patient')
-
-    if(cachedPatient){
-      console.log(cachedPatient)
-      return cachedPatient
-    }
-
     const patient = await this.prisma.patient.findUnique({
       where: {
         id,
@@ -73,7 +66,6 @@ export class PatientService {
 
     if (!patient) throw new NotFoundException('Patient does not exists');
     delete patient.password;
-    await this.cacheManager.set('cached_patient', { patient })
     return patient;
   }
 

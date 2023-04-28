@@ -360,7 +360,7 @@ describe('e2e test', () => {
 
       it('Should return notfound', () => {
         return pactum
-          .spec()
+          .spec() 
           .get(`${patientPath}/3532423`)
           .withHeaders({
             Authorization: 'Bearer $S{doctorToken}',

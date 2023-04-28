@@ -20,7 +20,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "dotenv -e .env.test -- jest --colors --watchAll --config ./test/jest-e2e.json",
-    "run:test": "yarn prisma:test:deploy && yarn test:e2e"
+    "run:test": "yarn prisma:test:deploy && yarn test:e2e",
+    "docker:test": "docker-compose down -v && docker-compose up -d test-db && docker-compose up test-api",
+    "docker:dev": "docker-compose down && docker-compose up -d dev-db && docker-compose up -d pg-admin && docker-compose up api"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

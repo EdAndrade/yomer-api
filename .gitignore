@@ -37,3 +37,5 @@ lerna-debug.log*
 ./uploads
 .env
 .env.test
+./DB/data
+docker-compose.override.yml
