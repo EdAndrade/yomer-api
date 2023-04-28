@@ -4,11 +4,11 @@ WORKDIR /app
 
 COPY ["yarn.lock", "package.json", "./"]
 
-RUN npm ci && npm cache clean --force
+RUN yarn install --only=production && yarn cache clean --force
 
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 ENV NODE_ENV production
 
