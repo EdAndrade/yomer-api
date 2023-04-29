@@ -16,7 +16,8 @@ jobs:
       - name: Deploy migrations
         env:
           DATABASE_URL: ${{ secrets.PROD_DB }}
-        run: yarn --silent prisma:deploy
+        run: npx prisma migrate deploy
+        silent: true
   build:
     runs-on: ubuntu-latest
     needs: deploymigrations

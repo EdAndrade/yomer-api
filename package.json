@@ -8,7 +8,6 @@
   "scripts": {
     "prisma:test:deploy": "dotenv -e .env.test -- npx prisma migrate deploy",
     "build:prod": "yarn prisma:generate && yarn build",
-    "prisma:deploy": "npx prisma migrate deploy",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
