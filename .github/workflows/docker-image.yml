@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ PROD_DB }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
