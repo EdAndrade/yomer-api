@@ -7,10 +7,11 @@
   "license": "UNLICENSED",
   "scripts": {
     "prisma:test:deploy": "dotenv -e .env.test -- npx prisma migrate deploy",
-    "build:prod": "yarn prisma:generate && yarn build",
+    "build:prod": "yarn prisma:prod:deploy && yarn prisma:generate && yarn build",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "prisma:prod:deploy": "npx prisma deploy",
     "prisma:generate": "npx prisma generate",
     "start:dev": "yarn prisma:generate && nest start --watch",
     "start:debug": "nest start --debug 0.0.0.0:9876 --watch",
