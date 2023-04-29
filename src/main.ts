@@ -22,9 +22,5 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, SwaggerDocument);
 
   await app.listen(3000);
-
-  setInterval(() => {
-    console.log('for watchtower test')
-  },1000)
 }
 bootstrap();
