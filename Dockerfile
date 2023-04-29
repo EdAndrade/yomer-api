@@ -8,7 +8,7 @@ RUN yarn install --only=production && yarn cache clean --force
 
 COPY . .
 
-RUN yarn build:prod --env DATABASE_URL=${DATABASE_URL}
+RUN yarn build:prod
 
 ENV NODE_ENV production
 
