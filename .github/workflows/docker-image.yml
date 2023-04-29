@@ -16,7 +16,7 @@ jobs:
       - name: Deploy migrations
         env:
           DATABASE_URL: ${{ secrets.PROD_DB }}
-        run: npx prisma migrate deploy
+        run: ::add-mask::npx prisma migrate deploy
   build:
     runs-on: ubuntu-latest
     needs: deploymigrations
